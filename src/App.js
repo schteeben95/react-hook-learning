@@ -1,25 +1,43 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
 
+
+const todos = [
+    "do something",
+    "do something else",
+    "procrastinate",
+    "just do something",
+    "ok never mind"
+]
+
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [todoState, setToDoState] = useState([])
+
+    function handleCheckBoxChange(i) {
+        const newState = [...todoState]
+        newState[i] = !newState[i]
+        setToDoState(newState)
+        console.log(newState)
+    }
+
+    const listItems = todos.map((item, i) =>
+        <div key={i}>
+            <label>
+                <input type="checkbox" id={i} key={i} onChange={() => handleCheckBoxChange(i)} />
+                {item}
+            </label>
+        </div>
+    )
+
+    return (
+        <>
+            {/* {console.log(todoState)} */}
+            {todoState.every(d => d === true) ? ":D" : ":("}
+            {listItems}
+        </>
+    );
 }
 
 export default App;
