@@ -17,13 +17,13 @@ function App() {
 
     function Items(props) {
 
-        function handleToDoChange(i) {
+        const handleToDoChange = ((i) => {
             const newState = [...todoStates]
             newState[i] = !newState[i]
             setToDoStates(newState)
-        }
+        })
 
-        function handleDelete(i) {
+        const handleDelete = ((i) => {
             const newToDoState = [...todoStates]
             newToDoState.splice(i, 1)
             setToDoStates(newToDoState)
@@ -31,7 +31,7 @@ function App() {
             const newToDoItems = [...todoItems]
             newToDoItems.splice(i, 1)
             setToDoItems(newToDoItems)
-        }
+        })
 
         return (
             <>
@@ -54,14 +54,14 @@ function App() {
     function NewToDoInput(props) {
         const [newToDo, setNewToDo] = useState("")
 
-        function handleKeyPress(event) {
+        const handleKeyPress = ((event) => {
             if (event.key === "Enter") {
                 handleSubmission(event.target.value)
                 event.target.value = ""
             }
-        }
+        })
 
-        function handleSubmission(content) {
+        const handleSubmission = ((content) => {
             const newToDoState = [...todoStates]
             const newToDoItems = [...todoItems]
             newToDoState.push(false)
@@ -69,7 +69,7 @@ function App() {
 
             setToDoStates(newToDoState)
             setToDoItems(newToDoItems)
-        }
+        })
 
         return (
             <>
@@ -85,7 +85,7 @@ function App() {
     }
 
 
-    function initialise() {
+    const initialise = (() => {
         if (!initialised) {
             if (isThereDataInLocalStorage()) {
                 readDataFromLocalStoarge()
@@ -94,27 +94,27 @@ function App() {
             }
             setInitialised(true)
         }
-    }
+    })
 
-    function isThereDataInLocalStorage() {
+    const isThereDataInLocalStorage = (() => {
         return localStorage.getItem("todos") !== null
-    }
+    })
 
-    function saveDataToLocalStorage() {
+    const saveDataToLocalStorage = (() => {
         localStorage.setItem("todos", JSON.stringify({
             "todoItems": todoItems,
             "todoStates": todoStates
         }))
-    }
+    })
 
-    function readDataFromLocalStoarge() {
+    const readDataFromLocalStoarge = (() => {
         if (isThereDataInLocalStorage()) {
             const data = JSON.parse(localStorage.getItem("todos"))
             console.log(data)
             setToDoItems(data["todoItems"])
             setToDoStates(data["todoStates"])
         }
-    }
+    })
 
     return (
         <>
