@@ -25,13 +25,24 @@ function App() {
             setToDoState(newState)
         }
 
+        function handleDelete(i) {
+            const newToDoState = [...todoState]
+            newToDoState.splice(i, 1)
+            setToDoState(newToDoState)
+
+            const newToDoItems = [...todoItems]
+            newToDoItems.splice(i, 1)
+            setToDoItems(newToDoItems)
+        }
+
         return (
             <>
                 {props.todos.map((content, i) => (
                     <label key={i}>
+                        <button
+                            onClick={() => handleDelete(i)}>x</button>
                         <input
                             type="checkbox"
-                            key={i}
                             defaultChecked={todoState[i]}
                             onClick={() => handleToDoChange(i)} />
                         {content}
