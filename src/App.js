@@ -13,29 +13,77 @@ const todos = [
 
 function App() {
 
+    const [todoItems, setToDoItems] = useState(todos)
     const [todoState, setToDoState] = useState([])
+    const [initialised, setInitialised] = useState(false)
 
-    function handleCheckBoxChange(i) {
-        const newState = [...todoState]
-        newState[i] = !newState[i]
-        setToDoState(newState)
-        console.log(newState)
+    function Items(props) {
+
+        function handleToDoChange(i) {
+            const newState = [...todoState]
+            newState[i] = !newState[i]
+            setToDoState(newState)
+        }
+
+        return (
+            <>
+                {props.todos.map((content, i) => (
+                    <label key={i}>
+                        <input type="checkbox" key={i} defaultChecked={todoState[i]} onClick={() => handleToDoChange(i)}/>
+                        {content}
+                        <br />
+                    </label>
+                ))}
+            </>
+        )
     }
 
-    const listItems = todos.map((item, i) =>
-        <div key={i}>
-            <label>
-                <input type="checkbox" id={i} key={i} onChange={() => handleCheckBoxChange(i)} />
-                {item}
-            </label>
-        </div>
-    )
+    function NewToDoInput(props) {
+        const [newToDo, setNewToDo] = useState("")
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                handleSubmission(event.target.value)
+                event.target.value = ""
+            }
+        }
+
+        function handleSubmission(content) {
+            const newToDoState = [...todoState]
+            const newToDoItems = [...todoItems]
+            newToDoState.push(false)
+            newToDoItems.push(content)
+
+            setToDoState(newToDoState)
+            setToDoItems(newToDoItems)
+        }
+
+        return (
+            <>
+                <input type="text" onKeyPress={handleKeyPress} onChange={e => setNewToDo(e.target.value)} value={newToDo}/>
+                <br />
+            </>
+        )
+    }
+
+
+    function initialise() {
+        if (!initialised) {
+            setToDoState(Array(todos.length).fill(false))
+            setInitialised(true)
+        }
+    }
 
     return (
         <>
-            {/* {console.log(todoState)} */}
-            {todoState.every(d => d === true) ? ":D" : ":("}
-            {listItems}
+            {initialise()}
+            <h1>
+                {todoState.every((t) => t) ?
+                    "You are all done!" :
+                    "Still " + todoState.filter((f) => !f).length + " to go..."}
+            </h1>
+            <NewToDoInput />
+            <Items todos={todoItems}/>
         </>
     );
 }
