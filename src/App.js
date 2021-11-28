@@ -14,21 +14,21 @@ const initialToDos = [
 function App() {
 
     const [todoItems, setToDoItems] = useState(initialToDos)
-    const [todoState, setToDoState] = useState([])
+    const [todoStates, setToDoStates] = useState([])
     const [initialised, setInitialised] = useState(false)
 
     function Items(props) {
 
         function handleToDoChange(i) {
-            const newState = [...todoState]
+            const newState = [...todoStates]
             newState[i] = !newState[i]
-            setToDoState(newState)
+            setToDoStates(newState)
         }
 
         function handleDelete(i) {
-            const newToDoState = [...todoState]
+            const newToDoState = [...todoStates]
             newToDoState.splice(i, 1)
-            setToDoState(newToDoState)
+            setToDoStates(newToDoState)
 
             const newToDoItems = [...todoItems]
             newToDoItems.splice(i, 1)
@@ -43,7 +43,7 @@ function App() {
                             onClick={() => handleDelete(i)}>x</button>
                         <input
                             type="checkbox"
-                            defaultChecked={todoState[i]}
+                            defaultChecked={todoStates[i]}
                             onClick={() => handleToDoChange(i)} />
                         {content}
                         <br />
@@ -64,12 +64,12 @@ function App() {
         }
 
         function handleSubmission(content) {
-            const newToDoState = [...todoState]
+            const newToDoState = [...todoStates]
             const newToDoItems = [...todoItems]
             newToDoState.push(false)
             newToDoItems.push(content)
 
-            setToDoState(newToDoState)
+            setToDoStates(newToDoState)
             setToDoItems(newToDoItems)
         }
 
@@ -89,21 +89,62 @@ function App() {
 
     function initialise() {
         if (!initialised) {
-            setToDoState(Array(todoState.length).fill(false))
+            setToDoStates(Array(todoItems.length).fill(false))
             setInitialised(true)
         }
+    }
+
+    function SaveRestoreButtons() {
+        function isThereDataInLocalStorage() {
+            return localStorage.getItem("todos") !== null
+        }
+
+        function saveDataToLocalStorage() {
+            localStorage.setItem("todos", JSON.stringify({
+                "todoItems": todoItems,
+                "todoStates": todoStates
+            }))
+        }
+
+        function readDataFromLocalStoarge() {
+            if (isThereDataInLocalStorage()) {
+                const data = JSON.parse(localStorage.getItem("todos"))
+                console.log(data)
+                setToDoItems(data["todoItems"])
+                setToDoStates(data["todoStates"])
+            }
+        }
+
+        return (
+            <div>
+                {console.log(isThereDataInLocalStorage())}
+                {isThereDataInLocalStorage()
+                    ?
+                    <button
+                        onClick={() => readDataFromLocalStoarge()}>
+                            Restore</button>
+                    :
+                    null
+                }
+                <button
+                    onClick={() => saveDataToLocalStorage()}>
+                    Save</button>
+            </div>
+        )
     }
 
     return (
         <>
             {initialise()}
+            {console.log(todoStates)}
             <h1>
-                {todoState.every((t) => t) ?
+                {todoStates.every((t) => t) ?
                     "You are all done!" :
-                    "Still " + todoState.filter((f) => !f).length + " to go..."}
+                    "Still " + todoStates.filter((f) => !f).length + " to go..."}
             </h1>
             <NewToDoInput />
             <Items todos={todoItems} />
+            <SaveRestoreButtons />
         </>
     );
 }
