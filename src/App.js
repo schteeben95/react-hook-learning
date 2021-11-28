@@ -1,14 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 
-const initialToDos = [
-    "do something",
-    "do something else",
-    "procrastinate",
-    "just do something",
-    "ok never mind"
-]
+const initialToDos = []
 
 
 function App() {
@@ -16,6 +10,10 @@ function App() {
     const [todoItems, setToDoItems] = useState(initialToDos)
     const [todoStates, setToDoStates] = useState([])
     const [initialised, setInitialised] = useState(false)
+
+    useEffect(() => {
+        saveDataToLocalStorage()
+    })
 
     function Items(props) {
 
@@ -89,48 +87,33 @@ function App() {
 
     function initialise() {
         if (!initialised) {
-            setToDoStates(Array(todoItems.length).fill(false))
+            if (isThereDataInLocalStorage()) {
+                readDataFromLocalStoarge()
+            } else {
+                setToDoStates(Array(todoItems.length).fill(false))
+            }
             setInitialised(true)
         }
     }
 
-    function SaveRestoreButtons() {
-        function isThereDataInLocalStorage() {
-            return localStorage.getItem("todos") !== null
-        }
+    function isThereDataInLocalStorage() {
+        return localStorage.getItem("todos") !== null
+    }
 
-        function saveDataToLocalStorage() {
-            localStorage.setItem("todos", JSON.stringify({
-                "todoItems": todoItems,
-                "todoStates": todoStates
-            }))
-        }
+    function saveDataToLocalStorage() {
+        localStorage.setItem("todos", JSON.stringify({
+            "todoItems": todoItems,
+            "todoStates": todoStates
+        }))
+    }
 
-        function readDataFromLocalStoarge() {
-            if (isThereDataInLocalStorage()) {
-                const data = JSON.parse(localStorage.getItem("todos"))
-                console.log(data)
-                setToDoItems(data["todoItems"])
-                setToDoStates(data["todoStates"])
-            }
+    function readDataFromLocalStoarge() {
+        if (isThereDataInLocalStorage()) {
+            const data = JSON.parse(localStorage.getItem("todos"))
+            console.log(data)
+            setToDoItems(data["todoItems"])
+            setToDoStates(data["todoStates"])
         }
-
-        return (
-            <div>
-                {console.log(isThereDataInLocalStorage())}
-                {isThereDataInLocalStorage()
-                    ?
-                    <button
-                        onClick={() => readDataFromLocalStoarge()}>
-                            Restore</button>
-                    :
-                    null
-                }
-                <button
-                    onClick={() => saveDataToLocalStorage()}>
-                    Save</button>
-            </div>
-        )
     }
 
     return (
@@ -144,7 +127,6 @@ function App() {
             </h1>
             <NewToDoInput />
             <Items todos={todoItems} />
-            <SaveRestoreButtons />
         </>
     );
 }
