@@ -29,7 +29,11 @@ function App() {
             <>
                 {props.todos.map((content, i) => (
                     <label key={i}>
-                        <input type="checkbox" key={i} defaultChecked={todoState[i]} onClick={() => handleToDoChange(i)}/>
+                        <input
+                            type="checkbox"
+                            key={i}
+                            defaultChecked={todoState[i]}
+                            onClick={() => handleToDoChange(i)} />
                         {content}
                         <br />
                     </label>
@@ -60,7 +64,12 @@ function App() {
 
         return (
             <>
-                <input autoFocus type="text" onKeyPress={handleKeyPress} onChange={e => setNewToDo(e.target.value)} value={newToDo}/>
+                <input
+                    autoFocus
+                    type="text"
+                    onKeyPress={handleKeyPress}
+                    onChange={e => setNewToDo(e.target.value)}
+                    value={newToDo} />
                 <br />
             </>
         )
@@ -83,7 +92,7 @@ function App() {
                     "Still " + todoState.filter((f) => !f).length + " to go..."}
             </h1>
             <NewToDoInput />
-            <Items todos={todoItems}/>
+            <Items todos={todoItems} />
         </>
     );
 }
