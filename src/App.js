@@ -60,7 +60,7 @@ function App() {
 
         return (
             <>
-                <input type="text" onKeyPress={handleKeyPress} onChange={e => setNewToDo(e.target.value)} value={newToDo}/>
+                <input autoFocus type="text" onKeyPress={handleKeyPress} onChange={e => setNewToDo(e.target.value)} value={newToDo}/>
                 <br />
             </>
         )
