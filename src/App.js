@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 
 
-const todos = [
+const initialToDos = [
     "do something",
     "do something else",
     "procrastinate",
@@ -13,7 +13,7 @@ const todos = [
 
 function App() {
 
-    const [todoItems, setToDoItems] = useState(todos)
+    const [todoItems, setToDoItems] = useState(initialToDos)
     const [todoState, setToDoState] = useState([])
     const [initialised, setInitialised] = useState(false)
 
