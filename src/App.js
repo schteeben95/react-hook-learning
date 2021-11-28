@@ -89,7 +89,7 @@ function App() {
 
     function initialise() {
         if (!initialised) {
-            setToDoState(Array(todos.length).fill(false))
+            setToDoState(Array(todoState.length).fill(false))
             setInitialised(true)
         }
     }
